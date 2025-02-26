@@ -2,8 +2,8 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Category } from './category.entity';
 
@@ -19,7 +19,7 @@ export class Subcategory {
   @Column({ length: 50, unique: true })
   name: string;
 
-  @OneToOne(() => Category)
+  @ManyToOne(() => Category)
   @JoinColumn()
   category: Category;
 }

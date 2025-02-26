@@ -32,6 +32,8 @@ import { ProductModule } from './modules/product/product.module';
         database: configService.get<string>('POSTGRES_DB'),
         synchronize: true,
         entities: [User, Store, Product, Category, Subcategory],
+        migrations: [],
+        migrationsTableName: 'migrations',
         // autoLoadEntities: true,
       }),
     }),
