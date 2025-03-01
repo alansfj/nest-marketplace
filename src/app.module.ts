@@ -30,7 +30,6 @@ import { ProductModule } from './modules/product/product.module';
         username: configService.get<string>('POSTGRES_USER'),
         password: configService.get<string>('POSTGRES_PASSWORD'),
         database: configService.get<string>('POSTGRES_DB'),
-        synchronize: true,
         entities: [User, Store, Product, Category, Subcategory],
         migrations: [],
         migrationsTableName: 'migrations',
