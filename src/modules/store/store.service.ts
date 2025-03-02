@@ -1,9 +1,14 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateStoreDto } from 'src/dtos/create-store.dto';
 import { Store } from 'src/entities/store.entity';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
+import { UpdateStoreDto } from 'src/dtos/update-store.dto';
 
 @Injectable()
 export class StoreService {
@@ -17,8 +22,13 @@ export class StoreService {
     stores: Store[];
     count: number;
   }> {
-    const [stores, count] = await this.storeRepository.findAndCountBy({
-      user: { id: userId },
+    const [stores, count] = await this.storeRepository.findAndCount({
+      where: {
+        user: { id: userId },
+      },
+      relations: {
+        categories: true,
+      },
     });
 
     return { stores, count };
@@ -28,13 +38,9 @@ export class StoreService {
     userId: number,
     createStoreDto: CreateStoreDto,
   ): Promise<Store> {
-    const categories = await this.categoryService.findByIds(
+    const categories = await this.categoryService.findByIdsOrFail(
       createStoreDto.categories,
     );
-
-    if (categories.length !== createStoreDto.categories.length) {
-      throw new BadRequestException('Some categories do not exist');
-    }
 
     const newStore = this.storeRepository.create({
       name: createStoreDto.name,
@@ -44,6 +50,31 @@ export class StoreService {
     });
 
     return await this.storeRepository.save(newStore);
+  }
+
+  async updateStore(
+    userId: number,
+    storeId: number,
+    updateStoreDto: UpdateStoreDto,
+  ): Promise<Store> {
+    const store = await this.storeRepository.findOne({
+      where: { id: storeId, user: { id: userId } },
+      relations: {
+        categories: true,
+      },
+    });
+
+    if (!store) throw new NotFoundException('store not found');
+
+    const categories = await this.categoryService.findByIdsOrFail(
+      updateStoreDto.categories,
+    );
+
+    store.name = updateStoreDto.name;
+    store.description = updateStoreDto.description;
+    store.categories = categories;
+
+    return await this.storeRepository.save(store);
   }
 
   async deleteOne(

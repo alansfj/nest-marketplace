@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Category } from 'src/entities/category.entity';
 import { In, Repository } from 'typeorm';
@@ -24,5 +24,15 @@ export class CategoryService {
 
   async findByIds(categoriesIds: number[]): Promise<Category[]> {
     return await this.categoryRepository.findBy({ id: In(categoriesIds) });
+  }
+
+  async findByIdsOrFail(categoriesIds: number[]): Promise<Category[]> {
+    const categoriesFound = await this.findByIds(categoriesIds);
+
+    if (categoriesFound.length !== categoriesIds.length) {
+      throw new BadRequestException('Some categories do not exist');
+    }
+
+    return categoriesFound;
   }
 }
