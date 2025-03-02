@@ -37,10 +37,6 @@ export class Store {
   @JoinTable()
   categories: Category[];
 
-  @Column({ default: false })
-  @Exclude()
-  deleted: boolean;
-
   @CreateDateColumn()
   @Exclude()
   createdAt: Date;
