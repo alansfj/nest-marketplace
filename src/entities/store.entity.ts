@@ -3,13 +3,13 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
   JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToMany,
   JoinTable,
+  ManyToOne,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Category } from './category.entity';
@@ -29,7 +29,7 @@ export class Store {
   @Column()
   description: string;
 
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.stores)
   @JoinColumn()
   user: User;
 

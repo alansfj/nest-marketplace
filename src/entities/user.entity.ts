@@ -1,5 +1,6 @@
 import { Exclude } from 'class-transformer';
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Store } from './store.entity';
 
 @Entity()
 export class User {
@@ -19,6 +20,9 @@ export class User {
 
   @Column({ length: 50 })
   lastName: string;
+
+  @OneToMany(() => Store, (store) => store.user)
+  stores: Store[];
 
   @Column()
   @Exclude()
