@@ -4,6 +4,7 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Post,
   Request,
 } from '@nestjs/common';
@@ -25,7 +26,10 @@ export class StoreController {
   }
 
   @Delete(':storeId')
-  deleteOne(@Request() req, @Param('storeId') storeId: number) {
+  deleteOne(
+    @Request() req,
+    @Param('storeId', new ParseIntPipe()) storeId: number,
+  ) {
     return this.storeService.deleteOne(req.user.id, storeId);
   }
 }
