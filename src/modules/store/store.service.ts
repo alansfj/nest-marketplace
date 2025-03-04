@@ -34,6 +34,19 @@ export class StoreService {
     return { stores, count };
   }
 
+  async findUserSpecificStoreOrFail(
+    userId: number,
+    storeId: number,
+  ): Promise<Store> {
+    const store = await this.storeRepository.findOne({
+      where: { id: storeId, user: { id: userId } },
+    });
+
+    if (!store) throw new NotFoundException('store not found');
+
+    return store;
+  }
+
   async createStore(
     userId: number,
     createStoreDto: CreateStoreDto,

@@ -33,6 +33,7 @@ import { ProductModule } from './modules/product/product.module';
         entities: [User, Store, Product, Category, Subcategory],
         migrations: [],
         migrationsTableName: 'migrations',
+        synchronize: false,
         // autoLoadEntities: true,
       }),
     }),

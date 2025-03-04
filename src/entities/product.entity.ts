@@ -30,10 +30,14 @@ export class Product {
   @Column()
   sku: string;
 
-  @ManyToOne(() => Subcategory, (subcategory) => subcategory.product)
+  @ManyToOne(() => Subcategory, (subcategory) => subcategory.product, {
+    nullable: false,
+  })
   subcategory: Subcategory;
 
-  @ManyToOne(() => Store, (store) => store.product)
+  @ManyToOne(() => Store, (store) => store.product, {
+    nullable: false,
+  })
   store: Store;
 
   @Column('money')
@@ -49,7 +53,9 @@ export class Product {
   @Exclude()
   active: boolean;
 
-  @ManyToOne(() => User, (user) => user.product)
+  @ManyToOne(() => User, (user) => user.product, {
+    nullable: false,
+  })
   user: User;
 
   @CreateDateColumn()
