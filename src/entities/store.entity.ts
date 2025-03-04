@@ -10,9 +10,11 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Category } from './category.entity';
+import { Product } from './product.entity';
 
 @Entity()
 export class Store {
@@ -36,6 +38,9 @@ export class Store {
   @ManyToMany(() => Category)
   @JoinTable()
   categories: Category[];
+
+  @OneToMany(() => Product, (product) => product.store)
+  product: Product;
 
   @CreateDateColumn()
   @Exclude()

@@ -3,11 +3,10 @@ import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
-  OneToOne,
-  JoinColumn,
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToOne,
 } from 'typeorm';
 import { Subcategory } from './subcategory.entity';
 import { Store } from './store.entity';
@@ -30,12 +29,10 @@ export class Product {
   @Column()
   sku: string;
 
-  @OneToOne(() => Subcategory)
-  @JoinColumn()
+  @ManyToOne(() => Subcategory, (subcategory) => subcategory.product)
   subcategory: Subcategory;
 
-  @OneToOne(() => Store)
-  @JoinColumn()
+  @ManyToOne(() => Store, (store) => store.product)
   store: Store;
 
   @Column('money')
