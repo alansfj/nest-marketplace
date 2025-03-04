@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { Subcategory } from './subcategory.entity';
 import { Store } from './store.entity';
+import { User } from './user.entity';
 
 @Entity()
 export class Product {
@@ -48,9 +49,8 @@ export class Product {
   @Exclude()
   active: boolean;
 
-  @Column({ default: false })
-  @Exclude()
-  deleted: boolean;
+  @ManyToOne(() => User, (user) => user.product)
+  user: User;
 
   @CreateDateColumn()
   @Exclude()
