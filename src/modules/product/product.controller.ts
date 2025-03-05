@@ -13,7 +13,7 @@ import { CreateProductDto } from 'src/dtos/create-product.dto';
 import { ProductService } from './product.service';
 import { UpdateProductDto } from 'src/dtos/update-product.dto';
 
-@Controller('product')
+@Controller('products')
 export class ProductController {
   constructor(private productService: ProductService) {}
 
