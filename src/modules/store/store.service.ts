@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,6 +11,8 @@ import { Store } from 'src/entities/store.entity';
 import { Repository } from 'typeorm';
 import { CategoryService } from '../category/category.service';
 import { UpdateStoreDto } from 'src/dtos/update-store.dto';
+import { ProductService } from '../product/product.service';
+import { Product } from 'src/entities/product.entity';
 
 @Injectable()
 export class StoreService {
@@ -16,6 +20,8 @@ export class StoreService {
     @InjectRepository(Store)
     private storeRepository: Repository<Store>,
     private categoryService: CategoryService,
+    @Inject(forwardRef(() => ProductService))
+    private productService: ProductService,
   ) {}
 
   async findAll(userId: number): Promise<{
@@ -32,6 +38,13 @@ export class StoreService {
     });
 
     return { stores, count };
+  }
+
+  async findProducts(storeId: number): Promise<{
+    products: Product[];
+    count: number;
+  }> {
+    return await this.productService.findStoreProducts(storeId);
   }
 
   async findUserSpecificStoreOrFail(

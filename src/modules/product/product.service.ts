@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -16,6 +18,7 @@ export class ProductService {
   constructor(
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
+    @Inject(forwardRef(() => StoreService))
     private storeService: StoreService,
     private subcategoryService: SubcategoryService,
   ) {}
@@ -42,6 +45,18 @@ export class ProductService {
     if (!product) throw new NotFoundException('product not found');
 
     return product;
+  }
+
+  async findStoreProducts(storeId: number): Promise<{
+    products: Product[];
+    count: number;
+  }> {
+    const [products, count] = await this.productRepository.findAndCount({
+      where: { store: { id: storeId } },
+      relations: ['subcategory'],
+    });
+
+    return { products, count };
   }
 
   async createProduct(userId: number, createProductDto: CreateProductDto) {

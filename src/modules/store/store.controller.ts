@@ -22,6 +22,11 @@ export class StoreController {
     return this.storeService.findAll(req.user.id);
   }
 
+  @Get(':storeId/products')
+  findProducts(@Param('storeId', new ParseIntPipe()) storeId: number) {
+    return this.storeService.findProducts(storeId);
+  }
+
   @Post()
   createStore(@Request() req, @Body() createStoreDto: CreateStoreDto) {
     return this.storeService.createStore(req.user.id, createStoreDto);
