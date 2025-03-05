@@ -50,7 +50,6 @@ export class Product {
   quantity: number;
 
   @Column({ default: true })
-  @Exclude()
   active: boolean;
 
   @ManyToOne(() => User, (user) => user.product, {
